@@ -5,12 +5,14 @@ import { SidebarNav } from '@/components/SidebarNav';
 import { BibleReader } from '@/components/BibleReader';
 import { SearchPanel } from '@/components/SearchPanel';
 import { SettingsBar } from '@/components/SettingsBar';
+import { ContactModal } from '@/components/ContactModal';
 import type { Book, Verse, SearchResult, AppSettings } from '@/types';
 import * as db from '@/services/dbService';
 
 const DEFAULT_SETTINGS: AppSettings = {
   theme: 'light',
   fontSize: 18,
+  presentationFontSize: 42,
   language: 'id',
 };
 
@@ -26,6 +28,7 @@ export default function Home() {
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
+  const [showContactModal, setShowContactModal] = useState(false);
   const [settings, setSettings] = useState<AppSettings>(DEFAULT_SETTINGS);
   const [isTauri, setIsTauri] = useState(false);
 
@@ -40,7 +43,11 @@ export default function Home() {
     if (saved) {
       try {
         const parsed = JSON.parse(saved) as AppSettings;
-        setSettings(parsed);
+        setSettings({
+          ...DEFAULT_SETTINGS,
+          ...parsed,
+          presentationFontSize: parsed.presentationFontSize || 42,
+        });
       } catch {
         // ignore invalid settings
       }
@@ -66,7 +73,6 @@ export default function Home() {
           setSelectedBook(allBooks[0]);
         }
       } catch (err) {
-        console.error('Failed to load books:', err);
         setDbError(err instanceof Error ? err.message : String(err));
       } finally {
         setLoading(false);
@@ -84,8 +90,8 @@ export default function Home() {
       try {
         const result = await db.getVerses(selectedBook!.id, selectedChapter);
         setVerses(result);
-      } catch (err) {
-        console.error('Failed to load verses:', err);
+      } catch {
+        setVerses([]);
       } finally {
         setLoadingVerses(false);
       }
@@ -103,8 +109,7 @@ export default function Home() {
     try {
       const results = await db.searchVerses(query);
       setSearchResults(results);
-    } catch (err) {
-      console.error('Search error:', err);
+    } catch {
       setSearchResults([]);
     } finally {
       setIsSearching(false);
@@ -165,8 +170,16 @@ export default function Home() {
     return (
       <div className="flex items-center justify-center h-screen" style={{ backgroundColor: 'var(--color-bg-primary)', color: 'var(--color-text-primary)' }}>
         <div className="text-center">
-          <div className="text-4xl mb-4">✝️</div>
-          <h1 className="text-2xl font-bold mb-2">Alkitab Delwinro</h1>
+          <img
+            src="/logo.png"
+            alt="Logo Alkitab"
+            className="w-16 h-16 rounded-2xl mx-auto mb-4 object-contain border shadow-sm"
+            style={{ borderColor: 'var(--color-border)' }}
+          />
+          <h1 className="text-2xl font-bold mb-1">Alkitab</h1>
+          <p className="text-xs mb-3 font-medium" style={{ color: 'var(--color-text-secondary)' }}>
+            © 2026 Delwinro Purba
+          </p>
           <p className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>
             Memuat aplikasi...
           </p>
@@ -185,6 +198,7 @@ export default function Home() {
         language={settings.language}
         onSelectBook={handleSelectBook}
         onSelectChapter={handleSelectChapter}
+        onOpenContact={() => setShowContactModal(true)}
         loading={loading}
       />
 
@@ -195,6 +209,7 @@ export default function Home() {
           settings={settings}
           onUpdateSetting={updateSetting}
           onToggleSearch={() => setShowSearch(prev => !prev)}
+          onOpenContact={() => setShowContactModal(true)}
           showSearch={showSearch}
           selectedBook={selectedBook}
           selectedChapter={selectedChapter}
@@ -218,13 +233,24 @@ export default function Home() {
           selectedBook={selectedBook}
           selectedChapter={selectedChapter}
           fontSize={settings.fontSize}
+          presentationFontSize={settings.presentationFontSize}
           language={settings.language}
+          theme={settings.theme}
           onPrevChapter={handlePrevChapter}
           onNextChapter={handleNextChapter}
           loading={loading || loadingVerses}
           error={dbError}
         />
       </div>
+
+      {/* Hubungi Saya Modal */}
+      <ContactModal
+        isOpen={showContactModal}
+        onClose={() => setShowContactModal(false)}
+        selectedBook={selectedBook}
+        selectedChapter={selectedChapter}
+        language={settings.language}
+      />
     </div>
   );
 }

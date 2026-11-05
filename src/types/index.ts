@@ -62,5 +62,6 @@ export type Language = 'sml' | 'id';
 export interface AppSettings {
   theme: Theme;
   fontSize: number;
+  presentationFontSize: number;
   language: Language;
 }

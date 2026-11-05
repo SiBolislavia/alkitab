@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Alkitab Delwinro',
-  description: 'Aplikasi pembaca Alkitab offline yang cepat dan ringan',
+  title: 'Alkitab',
+  description: 'Temukan Kedamaian dan Firman Tuhan Setiap Hari dalam Genggaman Anda.',
 };
 
 export default function RootLayout({

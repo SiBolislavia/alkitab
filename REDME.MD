@@ -1,6 +1,6 @@
 # Offline Bible Desktop App
 
-Aplikasi pembaca Alkitab desktop yang cepat, ringan, dan dapat diakses 100% secara offline. Dibangun menggunakan teknologi modern dengan arsitektur lokal yang aman.
+Aplikasi Alkitab desktop yang cepat, ringan, dan dapat diakses 100% secara offline. Dibangun menggunakan teknologi modern dengan arsitektur lokal yang aman.
 
 ## Tech Stack
 - **Desktop Wrapper:** Tauri v2 (Rust)

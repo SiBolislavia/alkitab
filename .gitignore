@@ -25,3 +25,14 @@ next-env.d.ts
 
 # tauri
 src-tauri/target/
+
+# database
+src-tauri/resources/
+
+# markdown
+PRD.MD 
+SECURITY.MD
+SKILLS.MD
+STYLEGUIDE.MD
+TASK.MD
+TECHSTACK.MD

@@ -6,6 +6,7 @@ interface SettingsBarProps {
   settings: AppSettings;
   onUpdateSetting: <K extends keyof AppSettings>(key: K, value: AppSettings[K]) => void;
   onToggleSearch: () => void;
+  onOpenContact: () => void;
   showSearch: boolean;
   selectedBook: Book | null;
   selectedChapter: number;
@@ -26,6 +27,7 @@ export function SettingsBar({
   settings,
   onUpdateSetting,
   onToggleSearch,
+  onOpenContact,
   showSearch,
   selectedBook,
   selectedChapter,
@@ -100,39 +102,78 @@ export function SettingsBar({
         {/* Divider */}
         <div className="w-px h-5" style={{ backgroundColor: 'var(--color-border)' }} />
 
-        {/* Font Size Controls */}
-        <div className="flex items-center gap-1">
+        {/* Font Size Controls (Reader) */}
+        <div className="flex items-center gap-1" title="Ukuran Font Pembacaan Ayat">
+          <span className="text-[11px] opacity-60 mr-0.5 hidden sm:inline">Baca:</span>
           <button
             onClick={() => onUpdateSetting('fontSize', Math.max(12, settings.fontSize - 2))}
-            className="p-1.5 rounded-md transition-colors duration-200 text-xs font-bold"
+            className="p-1.5 rounded-md transition-colors duration-200 text-xs font-bold cursor-pointer hover:bg-[var(--color-highlight)]"
             style={{ color: 'var(--color-text-secondary)' }}
-            onMouseEnter={e =>
-              (e.currentTarget.style.backgroundColor = 'var(--color-highlight)')
-            }
-            onMouseLeave={e =>
-              (e.currentTarget.style.backgroundColor = 'transparent')
-            }
-            title="Perkecil font"
+            title="Perkecil font baca ayat"
           >
             A-
           </button>
           <span
-            className="text-xs min-w-[2rem] text-center"
+            className="text-xs min-w-[1.6rem] text-center font-mono"
             style={{ color: 'var(--color-text-secondary)' }}
           >
             {settings.fontSize}
           </span>
           <button
             onClick={() => onUpdateSetting('fontSize', Math.min(32, settings.fontSize + 2))}
-            className="p-1.5 rounded-md transition-colors duration-200 text-sm font-bold"
+            className="p-1.5 rounded-md transition-colors duration-200 text-sm font-bold cursor-pointer hover:bg-[var(--color-highlight)]"
             style={{ color: 'var(--color-text-secondary)' }}
-            onMouseEnter={e =>
-              (e.currentTarget.style.backgroundColor = 'var(--color-highlight)')
+            title="Perbesar font baca ayat"
+          >
+            A+
+          </button>
+        </div>
+
+        {/* Divider */}
+        <div className="w-px h-5" style={{ backgroundColor: 'var(--color-border)' }} />
+
+        {/* Font Size Controls (Presentation Mode) */}
+        <div
+          className="flex items-center gap-1 px-2 py-1 rounded-lg border"
+          style={{
+            borderColor: 'var(--color-border)',
+            backgroundColor: 'var(--color-bg-primary)',
+          }}
+          title="Atur Ukuran Font Layar Penuh / Mode Presentasi"
+        >
+          <span className="text-xs" title="Mode Presentasi">📽️</span>
+          <span className="text-[11px] font-medium hidden lg:inline" style={{ color: 'var(--color-text-secondary)' }}>
+            Presentasi:
+          </span>
+          <button
+            onClick={() =>
+              onUpdateSetting(
+                'presentationFontSize',
+                Math.max(24, (settings.presentationFontSize || 42) - 4)
+              )
             }
-            onMouseLeave={e =>
-              (e.currentTarget.style.backgroundColor = 'transparent')
+            className="p-1 rounded-md transition-colors duration-200 text-xs font-bold cursor-pointer hover:bg-[var(--color-highlight)]"
+            style={{ color: 'var(--color-text-secondary)' }}
+            title="Perkecil font presentasi (-4px)"
+          >
+            A-
+          </button>
+          <span
+            className="text-xs min-w-[2rem] text-center font-mono font-bold"
+            style={{ color: 'var(--color-accent)' }}
+          >
+            {settings.presentationFontSize || 42}
+          </span>
+          <button
+            onClick={() =>
+              onUpdateSetting(
+                'presentationFontSize',
+                Math.min(72, (settings.presentationFontSize || 42) + 4)
+              )
             }
-            title="Perbesar font"
+            className="p-1 rounded-md transition-colors duration-200 text-sm font-bold cursor-pointer hover:bg-[var(--color-highlight)]"
+            style={{ color: 'var(--color-text-secondary)' }}
+            title="Perbesar font presentasi (+4px)"
           >
             A+
           </button>
@@ -170,6 +211,35 @@ export function SettingsBar({
             </button>
           ))}
         </div>
+
+        {/* Divider */}
+        <div className="w-px h-5" style={{ backgroundColor: 'var(--color-border)' }} />
+
+        {/* Hubungi Saya Button */}
+        <button
+          onClick={onOpenContact}
+          className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors duration-200 cursor-pointer"
+          style={{
+            color: 'var(--color-text-secondary)',
+            backgroundColor: 'transparent',
+          }}
+          onMouseEnter={e => {
+            e.currentTarget.style.backgroundColor = 'var(--color-highlight)';
+            e.currentTarget.style.color = 'var(--color-accent)';
+          }}
+          onMouseLeave={e => {
+            e.currentTarget.style.backgroundColor = 'transparent';
+            e.currentTarget.style.color = 'var(--color-text-secondary)';
+          }}
+          title={settings.language === 'sml' ? 'Hubungi Ahu (WA / Gmail)' : 'Hubungi Saya (WA / Gmail)'}
+        >
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+          </svg>
+          <span className="hidden md:inline">
+            {settings.language === 'sml' ? 'Hubungi Ahu' : 'Hubungi Saya'}
+          </span>
+        </button>
       </div>
     </div>
   );

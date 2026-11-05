@@ -10,6 +10,7 @@ interface SidebarNavProps {
   language: Language;
   onSelectBook: (book: Book) => void;
   onSelectChapter: (chapter: number) => void;
+  onOpenContact?: () => void;
   loading: boolean;
 }
 
@@ -20,6 +21,7 @@ export function SidebarNav({
   language,
   onSelectBook,
   onSelectChapter,
+  onOpenContact,
   loading,
 }: SidebarNavProps) {
   const [expandedBook, setExpandedBook] = useState<number | null>(null);
@@ -48,22 +50,49 @@ export function SidebarNav({
   if (collapsed) {
     return (
       <div
-        className="w-12 flex flex-col items-center py-4 border-r transition-all duration-300"
+        className="w-14 flex flex-col items-center justify-between py-3 border-r transition-all duration-300"
         style={{
           backgroundColor: 'var(--color-bg-sidebar)',
           borderColor: 'var(--color-border)',
         }}
       >
-        <button
-          onClick={() => setCollapsed(false)}
-          className="p-2 rounded-lg transition-colors duration-200 hover:opacity-80"
-          style={{ color: 'var(--color-text-primary)' }}
-          title="Buka sidebar"
-        >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M9 18l6-6-6-6" />
-          </svg>
-        </button>
+        <div className="flex flex-col items-center gap-3">
+          <button
+            onClick={() => setCollapsed(false)}
+            className="p-1 rounded-lg transition-transform hover:scale-105 cursor-pointer"
+            title="Buka sidebar"
+          >
+            <img
+              src="/logo.png"
+              alt="Logo Alkitab"
+              className="w-8 h-8 rounded-lg object-contain border shadow-2xs"
+              style={{ borderColor: 'var(--color-border)' }}
+            />
+          </button>
+          <button
+            onClick={() => setCollapsed(false)}
+            className="p-1.5 rounded-lg transition-colors duration-200 hover:opacity-80 cursor-pointer"
+            style={{ color: 'var(--color-text-primary)' }}
+            title="Buka sidebar"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M9 18l6-6-6-6" />
+            </svg>
+          </button>
+        </div>
+
+        {onOpenContact && (
+          <button
+            onClick={onOpenContact}
+            className="p-2 rounded-lg transition-colors duration-200 hover:opacity-80 cursor-pointer"
+            style={{ color: 'var(--color-text-secondary)' }}
+            title={language === 'sml' ? 'Hubungi Ahu (WA & Gmail)' : 'Hubungi Saya (WA & Gmail)'}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+            </svg>
+          </button>
+        )}
       </div>
     );
   }
@@ -81,18 +110,31 @@ export function SidebarNav({
         className="flex items-center justify-between px-4 py-3 border-b"
         style={{ borderColor: 'var(--color-border)' }}
       >
-        <div className="flex items-center gap-2">
-          <span className="text-lg">✝️</span>
-          <h1
-            className="font-bold text-base"
-            style={{ color: 'var(--color-text-primary)' }}
-          >
-            Alkitab
-          </h1>
+        <div className="flex items-center gap-2.5">
+          <img
+            src="/logo.png"
+            alt="Logo Alkitab"
+            className="w-8 h-8 rounded-lg object-contain border shadow-2xs"
+            style={{ borderColor: 'var(--color-border)' }}
+          />
+          <div className="flex flex-col">
+            <h1
+              className="font-bold text-base leading-tight"
+              style={{ color: 'var(--color-text-primary)' }}
+            >
+              Alkitab
+            </h1>
+            <span
+              className="text-[10px] font-medium leading-none mt-0.5"
+              style={{ color: 'var(--color-text-secondary)' }}
+            >
+              © 2026 Delwinro Purba
+            </span>
+          </div>
         </div>
         <button
           onClick={() => setCollapsed(true)}
-          className="p-1.5 rounded-lg transition-colors duration-200 hover:opacity-80"
+          className="p-1.5 rounded-lg transition-colors duration-200 hover:opacity-80 cursor-pointer"
           style={{ color: 'var(--color-text-secondary)' }}
           title="Tutup sidebar"
         >
@@ -235,6 +277,31 @@ export function SidebarNav({
           ))
         )}
       </div>
+
+      {/* Footer: Hubungi Saya */}
+      {onOpenContact && (
+        <div
+          className="p-3 border-t"
+          style={{
+            borderColor: 'var(--color-border)',
+            backgroundColor: 'var(--color-bg-sidebar)',
+          }}
+        >
+          <button
+            onClick={onOpenContact}
+            className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-xs font-semibold transition-colors duration-200 border cursor-pointer hover:opacity-90"
+            style={{
+              backgroundColor: 'var(--color-bg-primary)',
+              borderColor: 'var(--color-border)',
+              color: 'var(--color-text-primary)',
+            }}
+            title={language === 'sml' ? 'Hubungi Ahu (WA / Gmail)' : 'Hubungi Saya (WA / Gmail)'}
+          >
+            <span className="text-sm">💬</span>
+            <span>{language === 'sml' ? 'Hubungi Ahu' : 'Hubungi Saya'}</span>
+          </button>
+        </div>
+      )}
     </div>
   );
 }

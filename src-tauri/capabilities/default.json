@@ -5,10 +5,7 @@
   "permissions": [
     "core:default",
     "core:window:allow-start-dragging",
-    "sql:default",
-    "sql:allow-load",
     "sql:allow-select",
-    "sql:allow-execute",
     "sql:allow-close"
   ]
 }

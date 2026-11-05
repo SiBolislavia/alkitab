@@ -2,14 +2,16 @@
 
 import { useRef, useEffect, useMemo, useState } from 'react';
 import { PresentationMode } from '@/components/PresentationMode';
-import type { Book, Verse, Language } from '@/types';
+import type { Book, Verse, Language, Theme } from '@/types';
 
 interface BibleReaderProps {
   verses: Verse[];
   selectedBook: Book | null;
   selectedChapter: number;
   fontSize: number;
+  presentationFontSize: number;
   language: Language;
+  theme: Theme;
   onPrevChapter: () => void;
   onNextChapter: () => void;
   loading: boolean;
@@ -21,7 +23,9 @@ export function BibleReader({
   selectedBook,
   selectedChapter,
   fontSize,
+  presentationFontSize,
   language,
+  theme,
   onPrevChapter,
   onNextChapter,
   loading,
@@ -126,6 +130,8 @@ export function BibleReader({
           selectedChapter={selectedChapter}
           startVerseIndex={presentationIndex}
           language={language}
+          theme={theme}
+          fontSize={presentationFontSize}
           onClose={handleClosePresentation}
           onNextChapter={onNextChapter}
           onPrevChapter={onPrevChapter}
