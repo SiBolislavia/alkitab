@@ -14,6 +14,10 @@ dist/
 # misc
 .DS_Store
 *.pem
+
+# env - WAJIB, jangan sampai ke-push
+.env
+.env.local
 .env*.local
 
 # debug
@@ -25,12 +29,23 @@ next-env.d.ts
 
 # tauri
 src-tauri/target/
+src-tauri/gen/
 
 # database
 src-tauri/resources/
+*.db
+*.db-shm
+*.db-wal
+*.db.bak
+*.db.bak-shm
+*.db.bak-wal
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
 
 # markdown
-PRD.MD 
+CLAUDE.MD
+PRD.MD
 SECURITY.MD
 SKILLS.MD
 STYLEGUIDE.MD
